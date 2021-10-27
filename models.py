@@ -52,7 +52,7 @@ class Client(db.Model):
     name = db.Column(db.String(45))
     email = db.Column(db.String(45))
     password = db.Column(db.String(250))
-    age = db.Column(db.String(250))
+    age = db.Column(db.Integer)
 
     def __init__(self, name, email, password, age):
         self.name = name
