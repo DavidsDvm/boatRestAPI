@@ -1,6 +1,7 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+import os
 
 import models
 
@@ -44,7 +45,8 @@ def boatSave():
     models.db.session.add(newBoat)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Boat/update', methods=['PUT'])
 def boatUpdate():
@@ -64,7 +66,8 @@ def boatUpdate():
 
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Boat/<int:id>', methods=['DELETE'])
 def boatDelete(id):
@@ -74,7 +77,8 @@ def boatDelete(id):
     models.db.session.delete(boatActual)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=204)
+    return status_code
 
 @app.route('/api/Client/all')
 def clientAll():
@@ -96,7 +100,8 @@ def clientSave():
     models.db.session.add(newClient)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Client/update', methods=['PUT'])
 def clientUpdate():
@@ -116,7 +121,8 @@ def clientUpdate():
 
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Client/<int:id>', methods=['DELETE'])
 def clientDelete(id):
@@ -126,7 +132,8 @@ def clientDelete(id):
     models.db.session.delete(clientActual)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=204)
+    return status_code
 
 @app.route('/api/Category/all')
 def categoryAll():
@@ -146,7 +153,8 @@ def categorySave():
     models.db.session.add(newClient)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Category/update', methods=['PUT'])
 def categoryUpdate():
@@ -162,7 +170,8 @@ def categoryUpdate():
 
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=201)
+    return status_code
 
 @app.route('/api/Category/<int:id>', methods=['DELETE'])
 def categoryDelete(id):
@@ -172,9 +181,13 @@ def categoryDelete(id):
     models.db.session.delete(categoryActual)
     models.db.session.commit()
 
-    return jsonify()
+    status_code = Response(status=204)
+    return status_code
 
 if __name__ == '__main__':
     app.app_context().push()
     models.db.create_all()
-    app.run(host='0.0.0.0', port=80)
+
+    port = int(os.environ.get('PORT', 5000))
+
+    app.run(host='0.0.0.0', port=port)
