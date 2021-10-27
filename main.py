@@ -8,8 +8,9 @@ import models
 app = Flask(__name__)
 
 
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:password@localhost/mintic'
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://xwmwjeubxgtphj:f4814208adbb2d1999d1bad5d5f8c6d03912cc61fc0bafb5644e95e4151b93da@ec2-18-208-24-104.compute-1.amazonaws.com:5432/d1g8oof4s9nh1u'
 app.config['JSON_SORT_KEYS']=False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 models.db.init_app(app)
 models.ma.init_app(app)
 
@@ -176,4 +177,4 @@ def categoryDelete(id):
 if __name__ == '__main__':
     app.app_context().push()
     models.db.create_all()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)
