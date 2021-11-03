@@ -81,15 +81,29 @@ class MessagesSchema(ma.SQLAlchemyAutoSchema):
 
 class Reservations(db.Model):
     __tablename__ = 'Reservations'
-    id = db.Column(db.Integer, primary_key=True)
-    boat_id = db.Column(db.Integer, db.ForeignKey("Boat.id"))
-    client_id = db.Column(db.Integer, db.ForeignKey("Client.idClient"))
+    idReservation = db.Column(db.Integer, primary_key=True)
+    startDate = db.Column(db.DateTime)
+    devolutionDate = db.Column(db.DateTime)
+    status = db.Column(db.String(45))
+    score = db.Column(db.Integer)
 
-    boat = db.relationship("Boat", backref="reservations")
-    client = db.relationship("Client", backref="reservations")
+    # foraneas
+    boat = db.Column(db.Integer, db.ForeignKey("Boat.id"))
+    client = db.Column(db.Integer, db.ForeignKey("Client.idClient"))
+
+    boat_id = db.relationship("Boat", backref="reservations")
+    client_id = db.relationship("Client", backref="reservations")
+
+    def __init__(self, startDate, devolutionDate, status, score, boat, client):
+        self.startDate = startDate
+        self.devolutionDate = devolutionDate
+        self.status = status
+        self.score = score
+        self.boat = boat
+        self.client = client
 
 class ReservationsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = Reservations
-        include_fk = True
+        fields = ("idReservation", "startDate", "devolutionDate", "status", "boat", "client", "score")
+        ordered = True
     
