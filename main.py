@@ -346,12 +346,15 @@ def reservationReportClients():
 
                     outputReservation['boat'] = output1
 
-                newReservation.append(outputReservation)
-            i['reservations'] = newReservation
+                # then after that will add '+00:00' at the end of the dates (because the date is in the format '%Y-%m-%dT%H:%M:%S.%f+00:00')
+                outputReservation['startDate'] = outputReservation['startDate'] + '.000+00:00'
+                outputReservation['devolutionDate'] = outputReservation['devolutionDate'] + '.000+00:00'
 
-            # then after that will add '+00:00' at the end of the dates (because the date is in the format '%Y-%m-%dT%H:%M:%S.%f+00:00')
-            i['reservations'][0]['startDate'] = i['reservations'][0]['startDate'] + '.000+00:00'
-            i['reservations'][0]['devolutionDate'] = i['reservations'][0]['devolutionDate'] + '.000+00:00'
+                newReservation.append(outputReservation)
+
+
+
+            i['reservations'] = newReservation
 
         # First we create total where we put the number of reservations for this client after that we add the client and the reservations
         data['client'] = i
