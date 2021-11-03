@@ -334,9 +334,17 @@ def reservationReportClients():
             for j in i['reservations']:
                 data['total'] += 1
                 reservation = models.Reservations.query.filter(models.Reservations.idReservation == j.idReservation).first()
-                task_SchemaReservation = models.ReservationsSchema(many=False)
+                task_SchemaReservation = models.ReservationsSchema(many=False, exclude=('client',))
                 outputReservation = task_SchemaReservation.dump(reservation)
-                print(outputReservation['startDate'])
+
+                # Boat access
+                if isinstance(outputReservation['boat'], int):
+                    boat = models.Boat.query.filter(models.Boat.id == outputReservation['boat']).first()
+
+                    task_Schema1 = models.BoatSchema(exclude=('reservations',), many=False)
+                    output1 = task_Schema1.dump(boat)
+
+                    outputReservation['boat'] = output1
 
                 newReservation.append(outputReservation)
             i['reservations'] = newReservation
