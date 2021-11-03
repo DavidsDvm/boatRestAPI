@@ -15,7 +15,7 @@ app.config['JSON_SORT_KEYS']=False
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 if config_decouple('PRODUCTION', default=False):
-    app.config['SQLALCHEMY_DATABASE_URI']='postgres://xwmwjeubxgtphj:f4814208adbb2d1999d1bad5d5f8c6d03912cc61fc0bafb5644e95e4151b93da@ec2-18-208-24-104.compute-1.amazonaws.com:5432/d1g8oof4s9nh1u'
+    app.config['SQLALCHEMY_DATABASE_URI']='postgresql://xwmwjeubxgtphj:f4814208adbb2d1999d1bad5d5f8c6d03912cc61fc0bafb5644e95e4151b93da@ec2-18-208-24-104.compute-1.amazonaws.com:5432/d1g8oof4s9nh1u'
 
 models.db.init_app(app)
 models.ma.init_app(app)
@@ -243,8 +243,8 @@ def reservationAll():
             i['client'] = output2[0]
 
         # then after that will add '+00:00' at the end of the dates (because the date is in the format '%Y-%m-%dT%H:%M:%S.%f+00:00')
-        i['startDate'] = i['startDate'] + '+00:00'
-        i['devolutionDate'] = i['devolutionDate'] + '+00:00'
+        i['startDate'] = i['startDate'] + '.000+00:00'
+        i['devolutionDate'] = i['devolutionDate'] + '.000+00:00'
 
     return jsonify(output)
 
@@ -298,8 +298,8 @@ def reservationReport(startDate, devolutionDate):
             i['client'] = output2[0]
 
         # then after that will add '+00:00' at the end of the dates (because the date is in the format '%Y-%m-%dT%H:%M:%S.%f+00:00')
-        i['startDate'] = i['startDate'] + '+00:00'
-        i['devolutionDate'] = i['devolutionDate'] + '+00:00'
+        i['startDate'] = i['startDate'] + '.000+00:00'
+        i['devolutionDate'] = i['devolutionDate'] + '.000+00:00'
 
     return jsonify(output)
 
@@ -336,10 +336,15 @@ def reservationReportClients():
                 reservation = models.Reservations.query.filter(models.Reservations.idReservation == j.idReservation).first()
                 task_SchemaReservation = models.ReservationsSchema(many=False)
                 outputReservation = task_SchemaReservation.dump(reservation)
+                print(outputReservation['startDate'])
 
                 newReservation.append(outputReservation)
             i['reservations'] = newReservation
-    
+
+            # then after that will add '+00:00' at the end of the dates (because the date is in the format '%Y-%m-%dT%H:%M:%S.%f+00:00')
+            i['reservations'][0]['startDate'] = i['reservations'][0]['startDate'] + '.000+00:00'
+            i['reservations'][0]['devolutionDate'] = i['reservations'][0]['devolutionDate'] + '.000+00:00'
+
         # First we create total where we put the number of reservations for this client after that we add the client and the reservations
         data['client'] = i
         totalOutput.append({**data})
